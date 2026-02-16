@@ -31,20 +31,21 @@
     display: flex;
     align-items: center;
     padding: 1rem 0.5rem 1.5rem 0.5rem;
-    font-size: 1.1rem; /* Adjusted font size */
+    font-size: 1.1rem;
     font-weight: 600;
     color: white;
     background-color: transparent;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator line */
-    margin-bottom: 1rem; /* Space below header */
-    white-space: nowrap; /* Prevent wrapping */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+    white-space: nowrap;
 }
 
 #sidebar-wrapper .sidebar-heading .fa {
-    margin-right: 12px; /* Space between icon and text */
+    margin-right: 12px;
     font-size: 1.3rem;
 }
 
+/* Sidebar Items */
 #sidebar-wrapper .list-group-item {
     background-color: transparent;
     border: none;
@@ -53,6 +54,7 @@
     padding: 0.75rem 1rem;
     border-radius: 10px;
     margin-bottom: 5px;
+    cursor: pointer; /* Add cursor for clickable items */
 }
 
 #sidebar-wrapper .list-group-item:hover {
@@ -65,6 +67,32 @@
     color: #007bff !important;
     font-weight: 600;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Submenu Styles */
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding-left: 20px; /* Indentation for submenu items */
+}
+
+.submenu.open {
+    max-height: 200px; /* Adjust as needed to fit all items */
+}
+
+.submenu-item {
+    padding-left: 2.5rem !important; /* Deeper indentation */
+    font-size: 0.9rem;
+}
+
+/* Arrow Icon Rotation */
+.fa-angle-left {
+    transition: transform 0.3s;
+}
+
+.fa-angle-left.rotated {
+    transform: rotate(-90deg);
 }
 
 #page-content-wrapper {
@@ -114,4 +142,56 @@
     #page-content-wrapper { padding: 15px; }
     .app-header { top: 15px; }
     .header-title { font-size: 1.2rem; }
+}
+
+/* --- GLOBAL FIX for Table Actions Dropdown --- */
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: visible !important; /* Crucial for allowing dropdown to show */
+}
+
+.employee-table-card, .client-table-card {
+    overflow: visible !important;
+}
+
+.actions-cell {
+    position: relative; /* This is the anchor for the menu */
+}
+
+.actions-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 1000;
+    width: 130px;
+    margin-top: 8px;
+    list-style: none;
+    padding: 5px 0;
+    overflow: hidden;
+}
+
+.actions-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.actions-menu-item:hover {
+    background-color: #f4f6f9;
+}
+
+.actions-menu-item.delete {
+    color: #dc3545;
+}
+
+.actions-menu-item .fa {
+    width: 15px;
+    text-align: center;
 }

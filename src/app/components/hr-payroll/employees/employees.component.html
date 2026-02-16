@@ -1,0 +1,171 @@
+<div class="employee-container">
+
+  <!-- Employee List View -->
+  <div *ngIf="!isDetailViewVisible">
+    <!-- Top Controls -->
+    <div class="top-controls">
+      <div class="table-actions">
+        <div class="entries-control">
+          <label for="entries">Show</label>
+          <select id="entries" class="entries-dropdown" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+          <span>entries</span>
+        </div>
+        <div class="search-control">
+          <label for="search">Search:</label>
+          <input type="text" id="search" class="search-input" placeholder="Search..." [(ngModel)]="searchTerm" (input)="onSearch()">
+        </div>
+      </div>
+      <button class="add-employee-btn" (click)="openModal()">
+        <i class="fa fa-plus"></i> Add New Employee
+      </button>
+    </div>
+
+    <!-- Employee Table Card -->
+    <div class="employee-table-card">
+      <div class="table-responsive">
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th><div class="th-content">Employee No <i class="fa fa-sort"></i></div></th>
+              <th><div class="th-content">FullName <i class="fa fa-sort"></i></div></th>
+              <th><div class="th-content">Phone Number <i class="fa fa-sort"></i></div></th>
+              <th><div class="th-content">Email Address <i class="fa fa-sort"></i></div></th>
+              <th><div class="th-content">Leave Balance <i class="fa fa-sort"></i></div></th>
+              <th><div class="th-content">Status <i class="fa fa-sort"></i></div></th>
+              <th><div class="th-content">Actions</div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of paginatedEmployees; trackBy: trackByEmployeeNo">
+              <td>{{ employee.employeeNo }}</td>
+              <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+              <td>{{ employee.phone }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.leaveBalance > 0 ? employee.leaveBalance + ' Days' : '' }}</td>
+              <td><span class="status-indicator active"></span></td>
+              <td class="actions-cell">
+                <div class="actions-dropdown-container">
+                  <button class="actions-btn" (click)="toggleActionsDropdown(employee.employeeNo, $event)">
+                    Actions <i class="fa fa-caret-down"></i>
+                  </button>
+                  <div class="actions-menu" *ngIf="activeDropdownId === employee.employeeNo" [ngStyle]="dropdownStyle">
+                    <a href="#" class="actions-menu-item" (click)="openModal(employee); $event.preventDefault()"><i class="fa fa-pencil"></i> Edit</a>
+                    <a href="#" class="actions-menu-item" (click)="viewEmployee(employee.employeeNo); $event.preventDefault()"><i class="fa fa-eye"></i> View</a>
+                    <a href="#" class="actions-menu-item delete" (click)="deleteEmployee(employee.employeeNo); $event.preventDefault()"><i class="fa fa-trash"></i> Delete</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Table Footer -->
+      <div class="table-footer">
+        <div class="showing-entries">
+          Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ currentPage * itemsPerPage > filteredEmployees.length ? filteredEmployees.length : currentPage * itemsPerPage }} of {{ filteredEmployees.length }} entries
+        </div>
+        <div class="pagination">
+          <button class="pagination-btn" (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+          <button class="pagination-btn active">{{ currentPage }}</button>
+          <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= filteredEmployees.length">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee Detail View -->
+  <div *ngIf="isDetailViewVisible && selectedEmployee">
+    <div class="detail-view-card">
+      <h2 class="detail-view-header">Employee Details</h2>
+      <div class="detail-grid">
+        <!-- Row 1 -->
+        <div class="detail-item"><span class="detail-label">EmpNo</span><span class="detail-value">{{ selectedEmployee.employeeNo }}</span></div>
+        <div class="detail-item"><span class="detail-label">First Name</span><span class="detail-value">{{ selectedEmployee.firstName }}</span></div>
+        <!-- Row 2 -->
+        <div class="detail-item"><span class="detail-label">Middle Name</span><span class="detail-value">{{ selectedEmployee.middleName }}</span></div>
+        <div class="detail-item"><span class="detail-label">Last Name</span><span class="detail-value">{{ selectedEmployee.lastName }}</span></div>
+        <!-- Row 3 -->
+        <div class="detail-item"><span class="detail-label">Phone Number</span><span class="detail-value">{{ selectedEmployee.phone }}</span></div>
+        <div class="detail-item"><span class="detail-label">Email Address</span><span class="detail-value">{{ selectedEmployee.email }}</span></div>
+        <!-- Row 4 -->
+        <div class="detail-item"><span class="detail-label">Company Email Address</span><span class="detail-value">{{ selectedEmployee.companyEmail }}</span></div>
+        <div class="detail-item"><span class="detail-label">Country</span><span class="detail-value">{{ selectedEmployee.country }}</span></div>
+        <!-- Row 5 -->
+        <div class="detail-item"><span class="detail-label">Date of Birth</span><span class="detail-value">{{ selectedEmployee.dob }}</span></div>
+        <div class="detail-item"><span class="detail-label">Employment Date</span><span class="detail-value">{{ selectedEmployee.employmentDate }}</span></div>
+        <!-- Row 6 -->
+        <div class="detail-item"><span class="detail-label">Employment Terms</span><span class="detail-value">{{ selectedEmployee.employmentTerms }}</span></div>
+        <div class="detail-item"><span class="detail-label">Address</span><span class="detail-value">{{ selectedEmployee.address }}</span></div>
+        <!-- Row 7 -->
+        <div class="detail-item"><span class="detail-label">Department</span><span class="detail-value">{{ selectedEmployee.department }}</span></div>
+        <div class="detail-item"><span class="detail-label">Designation</span><span class="detail-value">{{ selectedEmployee.designation }}</span></div>
+        <!-- Row 8 -->
+        <div class="detail-item"><span class="detail-label">KRA PIN</span><span class="detail-value">{{ selectedEmployee.kraPin }}</span></div>
+        <div class="detail-item"><span class="detail-label">N.S.S.F Number</span><span class="detail-value">{{ selectedEmployee.nssf }}</span></div>
+        <!-- Row 9 -->
+        <div class="detail-item"><span class="detail-label">Bank Name</span><span class="detail-value">{{ selectedEmployee.bankName }}</span></div>
+        <div class="detail-item"><span class="detail-label">Bank Account No</span><span class="detail-value">{{ selectedEmployee.bankAccountNo }}</span></div>
+        <!-- Row 10 -->
+        <div class="detail-item"><span class="detail-label">IBAN</span><span class="detail-value">{{ selectedEmployee.iban }}</span></div>
+        <div class="detail-item"><span class="detail-label">Allocated Leave Balance</span><span class="detail-value">{{ selectedEmployee.leaveBalance }}</span></div>
+        <!-- Row 11 -->
+        <div class="detail-item"><span class="detail-label">Leave Balance</span><span class="detail-value">{{ selectedEmployee.leaveBalance }}</span></div>
+        <div class="detail-item"><span class="detail-label">Gender</span><span class="detail-value">{{ selectedEmployee.gender }}</span></div>
+      </div>
+      <div class="detail-footer">
+        <button class="btn-back" (click)="hideDetailView()"><i class="fa fa-arrow-left"></i> Back to List</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Add/Edit Employee Modal -->
+<div class="modal-overlay" *ngIf="isModalVisible">
+  <div class="modal-content large">
+    <div class="modal-header">
+      <h3 *ngIf="!isEditMode"><i class="fa fa-user-plus"></i> Add New Employee</h3>
+      <h3 *ngIf="isEditMode"><i class="fa fa-pencil"></i> Edit Employee</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <!-- Form fields... -->
+        <div class="form-group"><label>First Name</label><input type="text" [(ngModel)]="employeeForm.firstName"></div>
+        <div class="form-group"><label>Middle Name</label><input type="text" [(ngModel)]="employeeForm.middleName"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" [(ngModel)]="employeeForm.lastName"></div>
+        <div class="form-group"><label>Phone Number</label><input type="text" [(ngModel)]="employeeForm.phone"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" [(ngModel)]="employeeForm.email"></div>
+        <div class="form-group"><label>Gender</label><select [(ngModel)]="employeeForm.gender"><option>Select Gender</option><option>Male</option><option>Female</option></select></div>
+        <div class="form-group"><label>Country</label><select [(ngModel)]="employeeForm.country"><option>Select Country</option><option>Bangladesh</option><option>United States</option><option>United Kingdom</option><option>India</option><option>Canada</option><option>Australia</option></select></div>
+        <div class="form-group"><label>Date of Birth</label><input type="date" [(ngModel)]="employeeForm.dob"></div>
+        <div class="form-group"><label>Employment Date</label><input type="date" [(ngModel)]="employeeForm.employmentDate"></div>
+        <div class="form-group"><label>Address</label><input type="text" [(ngModel)]="employeeForm.address"></div>
+        <div class="form-group"><label>Department</label><select [(ngModel)]="employeeForm.department"><option>Select Department</option><option>Software Development</option><option>Human Resources (HR)</option><option>Finance & Accounts</option><option>Marketing & Sales</option><option>Customer Support</option><option>Quality Assurance (QA)</option></select></div>
+        <div class="form-group"><label>Designation</label><select [(ngModel)]="employeeForm.designation"><option>Select Designation</option><option>Frontend Developer</option><option>Backend Developer</option><option>Full Stack Engineer</option><option>UI/UX Designer</option><option>Project Manager</option><option>System Administrator</option><option>HR Manager</option></select></div>
+        <div class="form-group"><label>Bank Name</label><select [(ngModel)]="employeeForm.bankName"><option>Select Bank</option><option>Dutch-Bangla Bank (DBBL)</option><option>BRAC Bank</option><option>Islami Bank</option><option>City Bank</option><option>Standard Chartered</option><option>Sonali Bank</option></select></div>
+        <div class="form-group"><label>Bank Account No</label><input type="text" [(ngModel)]="employeeForm.bankAccountNo"></div>
+        <div class="form-group"><label>IBAN Number</label><input type="text" [(ngModel)]="employeeForm.iban"></div>
+        <div class="form-group"><label>SWIFT Code</label><input type="text" [(ngModel)]="employeeForm.swift"></div>
+        <div class="form-group"><label>N.S.S.F Number</label><input type="text" [(ngModel)]="employeeForm.nssf"></div>
+        <div class="form-group"><label>NHIF Number</label><input type="text" [(ngModel)]="employeeForm.nhif"></div>
+        <div class="form-group"><label>Company Email Address</label><input type="email" [(ngModel)]="employeeForm.companyEmail"></div>
+        <div class="form-group"><label>KRA PIN</label><input type="text" [(ngModel)]="employeeForm.kraPin"></div>
+        <div class="form-group"><label>Passport No</label><input type="text" [(ngModel)]="employeeForm.passportNo"></div>
+        <div class="form-group"><label>Employment Terms</label><select [(ngModel)]="employeeForm.employmentTerms"><option>Select Employment Terms</option><option>Permanent</option><option>Contractual</option><option>Probation</option><option>Internship</option><option>Part-Time</option></select></div>
+        <div class="form-group"><label>Disability Type</label><select [(ngModel)]="employeeForm.disabilityType"><option>Select Disability Type</option><option>None</option><option>Physical Impairment</option><option>Visual Impairment</option><option>Hearing Impairment</option><option>Cognitive/Learning Disability</option></select></div>
+        <div class="form-group"><label>Disability Certificate</label><input type="text" [(ngModel)]="employeeForm.disabilityCert"></div>
+        <div class="form-group"><label>Employee Photo</label><input type="file"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-back" (click)="closeModal()"><i class="fa fa-undo"></i> Back to List</button>
+      <button class="btn-register" (click)="saveEmployee()">
+        <i class="fa fa-download"></i> {{ isEditMode ? 'Update Employee' : 'Register Employee' }}
+      </button>
+    </div>
+  </div>
+</div>

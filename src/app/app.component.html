@@ -4,7 +4,7 @@
   <div id="sidebar-wrapper">
     <div class="sidebar-inner">
       <div class="sidebar-heading">
-        <i class="fa fa-code"></i> E. Management
+        <i class="fa fa-code"></i> Employee Management
       </div>
       <div class="list-group list-group-flush">
         <a routerLink="/dashboard" routerLinkActive="active" class="list-group-item list-group-item-action">
@@ -16,10 +16,21 @@
         <a routerLink="/fixed-assets" routerLinkActive="active" class="list-group-item list-group-item-action">
           <i class="fa fa-shopping-cart mr-3"></i> Fixed Assets
         </a>
-        <a routerLink="/hr-payroll" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-          <span><i class="fa fa-th-large mr-3"></i> HR & Payroll</span>
-          <i class="fa fa-angle-left"></i>
-        </a>
+
+        <!-- HR & Payroll Collapsible Menu -->
+        <div class="list-group-item-container">
+          <a (click)="toggleHrPayroll()" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <span><i class="fa fa-th-large mr-3"></i> HR & Payroll</span>
+            <i class="fa fa-angle-left" [class.rotated]="isHrPayrollOpen"></i>
+          </a>
+          <div class="submenu" [class.open]="isHrPayrollOpen">
+            <a routerLink="/hr-payroll/employees" routerLinkActive="active" class="list-group-item list-group-item-action submenu-item">Employees</a>
+            <a href="#" class="list-group-item list-group-item-action submenu-item">Holidays</a>
+            <a href="#" class="list-group-item list-group-item-action submenu-item">Salaries</a>
+            <a href="#" class="list-group-item list-group-item-action submenu-item">Attendance</a>
+          </div>
+        </div>
+
         <a routerLink="/leave-applications" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
           <span><i class="fa fa-tachometer mr-3"></i> Leave Applications</span>
           <i class="fa fa-angle-left"></i>

@@ -7,9 +7,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'employee-management-system';
-  isToggled = false; // Sidebar is visible by default on desktop
+  isToggled = false;
+  isHrPayrollOpen = false;
 
   toggleSidebar() {
     this.isToggled = !this.isToggled;
+  }
+
+  toggleHrPayroll() {
+    this.isHrPayrollOpen = !this.isHrPayrollOpen;
   }
 }
