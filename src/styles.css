@@ -1,1 +1,117 @@
 /* You can add global styles to this file, and also import other style files */
+
+#wrapper {
+    display: flex;
+    align-items: stretch;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #f4f6f9;
+}
+
+/* Modern Floating Sidebar */
+#sidebar-wrapper {
+    min-width: 280px;
+    max-width: 280px;
+    padding: 20px 0 20px 20px;
+    background-color: transparent;
+    border: none;
+    transition: margin 0.3s ease-in-out;
+}
+
+.sidebar-inner {
+    background-color: #007bff;
+    border-radius: 15px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
+}
+
+/* Redesigned Sidebar Header */
+#sidebar-wrapper .sidebar-heading {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+    font-size: 1.1rem; /* Adjusted font size */
+    font-weight: 600;
+    color: white;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator line */
+    margin-bottom: 1rem; /* Space below header */
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+#sidebar-wrapper .sidebar-heading .fa {
+    margin-right: 12px; /* Space between icon and text */
+    font-size: 1.3rem;
+}
+
+#sidebar-wrapper .list-group-item {
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white !important;
+}
+
+#sidebar-wrapper .list-group-item.active {
+    background-color: white !important;
+    color: #007bff !important;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#page-content-wrapper {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Global App Header */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+}
+
+/* --- Responsive & Other Styles --- */
+.header-left { display: flex; align-items: center; gap: 15px; }
+.header-title { font-size: 1.5rem; font-weight: 600; color: #333; margin: 0; }
+.profile-section { display: flex; align-items: center; gap: 20px; }
+.profile-section .fa { font-size: 1.2rem; color: #888; cursor: pointer; }
+.user-info { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; }
+.user-details { display: flex; flex-direction: column; }
+.user-name { font-weight: 600; color: #333; }
+.user-role { font-size: 0.85rem; color: #888; }
+.container-fluid { flex-grow: 1; padding: 20px 0 0 0; background-color: transparent; }
+
+@media (min-width: 769px) {
+    #sidebar-wrapper { margin-left: 0; }
+    #menu-toggle { display: none; }
+    #wrapper.toggled #sidebar-wrapper { margin-left: -280px; }
+}
+
+@media (max-width: 768px) {
+    #sidebar-wrapper { margin-left: -280px; padding: 15px 0 15px 15px; }
+    #menu-toggle { display: block; }
+    #wrapper.toggled #sidebar-wrapper { margin-left: 0; }
+    #page-content-wrapper { padding: 15px; }
+    .app-header { top: 15px; }
+    .header-title { font-size: 1.2rem; }
+}
