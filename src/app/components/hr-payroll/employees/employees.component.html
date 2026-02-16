@@ -30,29 +30,29 @@
         <table class="employee-table">
           <thead>
             <tr>
-              <th><div class="th-content">Employee No <i class="fa fa-sort"></i></div></th>
-              <th><div class="th-content">FullName <i class="fa fa-sort"></i></div></th>
-              <th><div class="th-content">Phone Number <i class="fa fa-sort"></i></div></th>
-              <th><div class="th-content">Email Address <i class="fa fa-sort"></i></div></th>
-              <th><div class="th-content">Leave Balance <i class="fa fa-sort"></i></div></th>
-              <th><div class="th-content">Status <i class="fa fa-sort"></i></div></th>
+              <th (click)="sort('employeeNo')"><div class="th-content">Employee No <i class="fa fa-sort"></i></div></th>
+              <th (click)="sort('firstName')"><div class="th-content">FullName <i class="fa fa-sort"></i></div></th>
+              <th (click)="sort('phone')"><div class="th-content">Phone Number <i class="fa fa-sort"></i></div></th>
+              <th (click)="sort('email')"><div class="th-content">Email Address <i class="fa fa-sort"></i></div></th>
+              <th (click)="sort('leaveBalance')"><div class="th-content">Leave Balance <i class="fa fa-sort"></i></div></th>
+              <th (click)="sort('status')"><div class="th-content">Status <i class="fa fa-sort"></i></div></th>
               <th><div class="th-content">Actions</div></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let employee of paginatedEmployees; trackBy: trackByEmployeeNo">
+            <tr *ngFor="let employee of paginatedEmployees; let i = index; trackBy: trackByEmployeeNo">
               <td>{{ employee.employeeNo }}</td>
               <td>{{ employee.firstName }} {{ employee.lastName }}</td>
               <td>{{ employee.phone }}</td>
               <td>{{ employee.email }}</td>
               <td>{{ employee.leaveBalance > 0 ? employee.leaveBalance + ' Days' : '' }}</td>
-              <td><span class="status-indicator active"></span></td>
+              <td><span class="status-indicator" [ngClass]="{'active': employee.status === 'Active', 'inactive': employee.status === 'Inactive'}"></span></td>
               <td class="actions-cell">
                 <div class="actions-dropdown-container">
-                  <button class="actions-btn" (click)="toggleActionsDropdown(employee.employeeNo, $event)">
+                  <button class="actions-btn" (click)="toggleActionsDropdown(i, $event)">
                     Actions <i class="fa fa-caret-down"></i>
                   </button>
-                  <div class="actions-menu" *ngIf="activeDropdownId === employee.employeeNo" [ngStyle]="dropdownStyle">
+                  <div class="actions-menu" *ngIf="activeDropdownId === i" [ngStyle]="dropdownStyle">
                     <a href="#" class="actions-menu-item" (click)="openModal(employee); $event.preventDefault()"><i class="fa fa-pencil"></i> Edit</a>
                     <a href="#" class="actions-menu-item" (click)="viewEmployee(employee.employeeNo); $event.preventDefault()"><i class="fa fa-eye"></i> View</a>
                     <a href="#" class="actions-menu-item delete" (click)="deleteEmployee(employee.employeeNo); $event.preventDefault()"><i class="fa fa-trash"></i> Delete</a>

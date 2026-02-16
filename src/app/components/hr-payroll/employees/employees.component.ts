@@ -48,7 +48,7 @@ export class EmployeesComponent implements OnInit {
   isDetailViewVisible = false;
   isModalVisible = false;
   isEditMode = false;
-  activeDropdownId: string | null = null; // Use a unique ID to track the open dropdown
+  activeDropdownId: number | null = null; // Use row index to track the open dropdown
   dropdownStyle = {}; // For dynamic positioning
 
   // --- Data Models ---
@@ -59,6 +59,10 @@ export class EmployeesComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
   searchTerm = '';
+
+  // Sorting
+  sortColumn = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor() { }
 
@@ -100,8 +104,18 @@ export class EmployeesComponent implements OnInit {
 
   // --- Data Handling (CRUD) ---
   saveEmployee(): void {
+    // Strict validation
     if (!this.employeeForm.firstName || !this.employeeForm.lastName) {
       alert('First Name and Last Name are required.');
+      return;
+    }
+    if (!this.employeeForm.phone) {
+      alert('Phone Number is required.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.employeeForm.email)) {
+      alert('Invalid Email Address.');
       return;
     }
 
@@ -112,7 +126,12 @@ export class EmployeesComponent implements OnInit {
         alert('Employee Updated Successfully!');
       }
     } else {
-      this.employeeForm.employeeNo = `Emp${String(this.allEmployees.length + 1).padStart(3, '0')}`;
+      // Find the highest existing ID to prevent duplicates after deletion
+      const highestId = this.allEmployees.reduce((maxId, e) => {
+        const currentId = parseInt(e.employeeNo.replace('Emp', ''), 10);
+        return currentId > maxId ? currentId : maxId;
+      }, 0);
+      this.employeeForm.employeeNo = `Emp${String(highestId + 1).padStart(3, '0')}`;
       this.allEmployees.unshift({ ...this.employeeForm });
       alert('Employee Registered Successfully!');
     }
@@ -127,6 +146,12 @@ export class EmployeesComponent implements OnInit {
       this.allEmployees = this.allEmployees.filter(e => e.employeeNo !== employeeNo);
       this.saveEmployeesToStorage();
       this.applyFiltersAndPagination();
+
+      // Fix for empty pagination bug
+      if (this.paginatedEmployees.length === 0 && this.currentPage > 1) {
+        this.currentPage--;
+        this.applyFiltersAndPagination();
+      }
       this.activeDropdownId = null;
     }
   }
@@ -141,6 +166,7 @@ export class EmployeesComponent implements OnInit {
       dummyEmployee.employeeNo = 'Emp001';
       dummyEmployee.firstName = 'James';
       dummyEmployee.lastName = 'Karanja';
+      dummyEmployee.status = 'Active';
       this.allEmployees = [dummyEmployee];
       this.saveEmployeesToStorage();
     }
@@ -161,16 +187,49 @@ export class EmployeesComponent implements OnInit {
   }
 
   applyFiltersAndPagination(): void {
+    // Filter first
     this.filteredEmployees = this.allEmployees.filter(e =>
       (e.firstName + ' ' + e.lastName).toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       e.employeeNo.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+
+    // Then sort
+    this.sortData();
+
+    // Then paginate
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.paginatedEmployees = this.filteredEmployees.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  toggleActionsDropdown(employeeNo: string, event: MouseEvent): void {
-    if (this.activeDropdownId === employeeNo) {
+  sort(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.applyFiltersAndPagination();
+  }
+
+  private sortData(): void {
+    if (!this.sortColumn) return;
+
+    this.filteredEmployees.sort((a, b) => {
+      const valA = a[this.sortColumn];
+      const valB = b[this.sortColumn];
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+  toggleActionsDropdown(index: number, event: MouseEvent): void {
+    if (this.activeDropdownId === index) {
       this.activeDropdownId = null; // Close if already open
     } else {
       const target = event.currentTarget as HTMLElement; // Use currentTarget for reliability
@@ -182,7 +241,7 @@ export class EmployeesComponent implements OnInit {
       } else { // Default, open downwards
         this.dropdownStyle = { top: '100%', bottom: 'auto' };
       }
-      this.activeDropdownId = employeeNo; // Open for the clicked employee
+      this.activeDropdownId = index; // Open for the clicked row index
     }
   }
 

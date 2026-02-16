@@ -70,6 +70,7 @@
     font-weight: 600;
     color: #333;
     background-color: #f9fafb;
+    cursor: pointer;
 }
 
 .th-content {
@@ -89,8 +90,16 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
+}
+
+.status-indicator.active {
     background-color: #28a745;
 }
+
+.status-indicator.inactive {
+    background-color: #dc3545;
+}
+
 
 /* Actions Dropdown */
 .actions-cell {
