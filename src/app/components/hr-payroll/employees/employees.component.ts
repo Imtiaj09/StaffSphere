@@ -196,6 +196,9 @@ export class EmployeesComponent implements OnInit {
     // Then sort
     this.sortData();
 
+    // Reset dropdown state before pagination
+    this.activeDropdownId = null;
+
     // Then paginate
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     this.paginatedEmployees = this.filteredEmployees.slice(startIndex, startIndex + this.itemsPerPage);
