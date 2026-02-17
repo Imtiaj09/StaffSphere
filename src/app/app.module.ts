@@ -15,7 +15,8 @@ import { AdministrationComponent } from './components/administration/administrat
 import { SystemSettingsComponent } from './components/system-settings/system-settings.component';
 import { EmployeesComponent } from './components/hr-payroll/employees/employees.component';
 import { HolidaysComponent } from './components/hr-payroll/holidays/holidays.component';
-import { ClickOutsideDirective } from './click-outside.directive'; // Import the new directive
+import { LoginComponent } from './components/login/login.component';
+import { ClickOutsideDirective } from './click-outside.directive';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ClickOutsideDirective } from './click-outside.directive'; // Import the
     SystemSettingsComponent,
     EmployeesComponent,
     HolidaysComponent,
-    ClickOutsideDirective // Declare the new directive
+    LoginComponent,
+    ClickOutsideDirective
   ],
   imports: [
     BrowserModule,

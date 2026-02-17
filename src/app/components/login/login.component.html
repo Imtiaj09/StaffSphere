@@ -1,0 +1,21 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>StaffSphere Admin Portal</h2>
+    </div>
+    <div class="login-body">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" [(ngModel)]="loginData.email" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="loginData.password" placeholder="Enter your password">
+      </div>
+      <button class="btn-sign-in" (click)="onLogin()">Sign In</button>
+    </div>
+    <div class="login-footer">
+      <a href="#">Forgot Password? Contact System Administrator</a>
+    </div>
+  </div>
+</div>

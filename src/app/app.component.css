@@ -1,0 +1,157 @@
+#wrapper {
+    display: flex;
+    transition: all 0.3s;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    width: 250px;
+    background-color: #343a40;
+    color: #adb5bd;
+    transition: all 0.3s;
+    margin-left: -250px;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+.sidebar-inner {
+    padding-top: 15px;
+}
+
+.sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    border-bottom: 1px solid #495057;
+}
+
+.list-group-item {
+    background-color: #343a40;
+    color: #adb5bd;
+    border: none;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.list-group-item-action:hover {
+    background-color: #495057;
+    color: white;
+}
+
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.submenu.open {
+    max-height: 200px; /* Adjust as needed */
+}
+
+.submenu-item {
+    padding-left: 2.5rem !important;
+}
+
+.fa-angle-left.rotated {
+    transform: rotate(-90deg);
+}
+
+#page-content-wrapper {
+    width: 100%;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.profile-section {
+    position: relative;
+}
+
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.user-dropdown-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.user-dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.user-dropdown-menu a:hover {
+    background-color: #f5f5f5;
+}
+
+.user-dropdown-menu hr {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.logout-btn {
+    cursor: pointer;
+}

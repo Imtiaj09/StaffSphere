@@ -1,25 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+
+interface SystemUser {
+  id: number;
+  fullName: string;
+  email: string;
+  password?: string;
+  role: 'Admin' | 'Sub-Admin' | 'HR' | 'Employee';
+  status: 'Active' | 'Inactive';
+  photoUrl?: string;
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'employee-management-system';
   isToggled = false;
   isHrPayrollOpen = false;
+  isUserMenuOpen = false;
+  currentUser: SystemUser | null = null;
 
-  constructor(private router: Router) {
+  constructor(public router: Router) { // Changed to public
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       if (event.urlAfterRedirects.includes('/hr-payroll')) {
         this.isHrPayrollOpen = true;
       }
+      // Hide sidebar and header on login page
+      this.shouldShowHeaderAndSidebar(event.urlAfterRedirects);
     });
+  }
+
+  ngOnInit(): void {
+    this.loadCurrentUser();
+  }
+
+  shouldShowHeaderAndSidebar(url: string): boolean {
+    return url !== '/login';
+  }
+
+  loadCurrentUser(): void {
+    const user = localStorage.getItem('currentUser');
+    if (user) {
+      this.currentUser = JSON.parse(user);
+    }
   }
 
   toggleSidebar() {
@@ -28,5 +57,18 @@ export class AppComponent {
 
   toggleHrPayroll() {
     this.isHrPayrollOpen = !this.isHrPayrollOpen;
+  }
+
+  toggleUserMenu() {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  logout(): void {
+    if (confirm('Are you sure you want to log out?')) {
+      localStorage.removeItem('currentUser');
+      this.currentUser = null;
+      this.isUserMenuOpen = false;
+      this.router.navigate(['/login']);
+    }
   }
 }

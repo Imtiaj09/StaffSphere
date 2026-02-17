@@ -1,1 +1,94 @@
-<p>administration works!</p>
+<div class="admin-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">System Administration</h1>
+  </div>
+
+  <!-- Top Controls -->
+  <div class="top-controls">
+    <button class="add-user-btn" (click)="openModal()">
+      <i class="fa fa-plus"></i> Add New System User
+    </button>
+  </div>
+
+  <!-- System Users Table Card -->
+  <div class="admin-table-card">
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email (Username)</th>
+            <th>Role</th>
+            <th>Password</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of allUsers">
+            <td>{{ user.fullName }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">{{ user.role }}</span>
+            </td>
+            <td>******</td>
+            <td class="actions-cell">
+              <button class="btn-icon btn-edit" (click)="openModal(user)"><i class="fa fa-pencil"></i></button>
+              <button class="btn-icon btn-delete" (click)="deleteUser(user.id)"><i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div class="modal-overlay" *ngIf="isModalVisible">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 *ngIf="!isEditMode"><i class="fa fa-user-plus"></i> Add New System User</h3>
+      <h3 *ngIf="isEditMode"><i class="fa fa-pencil"></i> Edit System User</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="userForm.fullName">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" [(ngModel)]="userForm.email">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="userForm.password">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select [(ngModel)]="userForm.role">
+            <option>Sub-Admin</option>
+            <option>HR</option>
+            <option>Employee</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Profile Image URL</label>
+          <input type="text" [(ngModel)]="userForm.photoUrl" placeholder="https://example.com/image.png">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-back" (click)="closeModal()">
+        <i class="fa fa-undo"></i> Back to List
+      </button>
+      <button class="btn-register" (click)="saveUser()">
+        <i class="fa fa-save"></i> {{ isEditMode ? 'Update User' : 'Register User' }}
+      </button>
+    </div>
+  </div>
+</div>
