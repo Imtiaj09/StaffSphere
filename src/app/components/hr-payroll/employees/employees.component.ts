@@ -259,6 +259,10 @@ export class EmployeesComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
+      if (file.size > 200000) { // 200KB limit
+        alert('Image too large! Please choose an image under 200KB.');
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         this.employeeForm.photoUrl = reader.result as string;

@@ -44,9 +44,14 @@ export class HolidaysComponent implements OnInit {
 
   // --- Data Handling (CRUD) ---
   saveHoliday(): void {
-    if (!this.holidayForm.name || !this.holidayForm.startDate || !this.holidayForm.endDate) {
-      alert('Holiday Name, Start Date, and End Date are required.');
+    if (!this.holidayForm.name || !this.holidayForm.startDate) {
+      alert('Holiday Name and Start Date are required.');
       return;
+    }
+
+    // If end date is empty, set it to the start date
+    if (!this.holidayForm.endDate) {
+      this.holidayForm.endDate = this.holidayForm.startDate;
     }
 
     if (this.isEditMode) {
@@ -79,6 +84,8 @@ export class HolidaysComponent implements OnInit {
     const storedHolidays = localStorage.getItem('holidaysData');
     if (storedHolidays) {
       this.allHolidays = JSON.parse(storedHolidays);
+      // Sort by date immediately after loading
+      this.allHolidays.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     } else {
       this.allHolidays = [];
     }

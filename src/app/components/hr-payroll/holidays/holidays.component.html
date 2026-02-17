@@ -20,7 +20,7 @@
             <th>#</th>
             <th>Holiday Name</th>
             <th>Start Date</th>
-            <th>End Day</th>
+            <th>Day</th>
             <th>Description</th>
             <th>Action</th>
           </tr>
@@ -30,7 +30,7 @@
             <td>{{ i + 1 }}</td>
             <td>{{ holiday.name }}</td>
             <td>{{ holiday.startDate | date: 'dd-MM-yyyy' }}</td>
-            <td>{{ getDayOfWeek(holiday.endDate) }}</td>
+            <td>{{ getDayOfWeek(holiday.startDate) }}</td>
             <td>{{ holiday.description }}</td>
             <td class="actions-cell">
               <button class="btn-icon btn-edit" (click)="openModal(holiday)"><i class="fa fa-pencil"></i></button>
@@ -66,7 +66,7 @@
           <input type="date" [(ngModel)]="holidayForm.startDate">
         </div>
         <div class="form-group">
-          <label>End Date</label>
+          <label>End Date (Optional)</label>
           <input type="date" [(ngModel)]="holidayForm.endDate">
         </div>
       </div>
