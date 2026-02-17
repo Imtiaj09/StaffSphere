@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-// 1. Data Model Updated
+// 1. Define Interface
 interface SystemUser {
   id: number;
   fullName: string;
-  email: string; // Used as username
-  password?: string; // Optional for display
+  email: string;
+  password?: string;
   role: 'Admin' | 'Sub-Admin' | 'HR' | 'Employee';
-  status: 'Active' | 'Inactive';
   photoUrl?: string;
+  status: 'Active' | 'Inactive';
 }
 
 @Component({
@@ -22,6 +22,8 @@ export class AdministrationComponent implements OnInit {
   isModalVisible = false;
   isEditMode = false;
   userForm: SystemUser = this.getInitialFormState();
+  selectedFile: File | null = null;
+  previewUrl: string | ArrayBuffer | null = null;
 
   constructor() { }
 
@@ -39,6 +41,8 @@ export class AdministrationComponent implements OnInit {
       this.userForm = this.getInitialFormState();
     }
     this.isModalVisible = true;
+    this.selectedFile = null;
+    this.previewUrl = null;
   }
 
   closeModal(): void {
@@ -48,8 +52,16 @@ export class AdministrationComponent implements OnInit {
   // --- Data Handling (CRUD) ---
   saveUser(): void {
     if (!this.userForm.fullName || !this.userForm.email || !this.userForm.password || !this.userForm.role) {
-      alert('All fields are required.');
+      alert('Full Name, Email, Password, and Role are required.');
       return;
+    }
+    this.finalizeUserSave();
+  }
+
+  finalizeUserSave(): void {
+    // Only update the photoUrl if a new file was selected
+    if (this.previewUrl) {
+      this.userForm.photoUrl = this.previewUrl as string;
     }
 
     if (this.isEditMode) {
@@ -76,6 +88,18 @@ export class AdministrationComponent implements OnInit {
     }
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // --- Storage and Utility ---
   loadUsersFromStorage(): void {
     const storedUsers = localStorage.getItem('systemUsers');
@@ -87,7 +111,7 @@ export class AdministrationComponent implements OnInit {
         id: 1,
         fullName: 'Super Admin',
         email: 'admin@company.com',
-        password: 'admin123',
+        password: '12345',
         role: 'Admin',
         status: 'Active',
         photoUrl: 'https://i.pravatar.cc/40' // Default placeholder

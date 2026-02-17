@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   isHrPayrollOpen = false;
   isUserMenuOpen = false;
   currentUser: SystemUser | null = null;
-  showSidebar: boolean = true;
+  showSidebar: boolean = true; // 1. Property added
 
   constructor(public router: Router) {
     this.router.events.pipe(
@@ -32,12 +32,17 @@ export class AppComponent implements OnInit {
       if (event.urlAfterRedirects.includes('/hr-payroll')) {
         this.isHrPayrollOpen = true;
       }
-      this.showSidebar = !event.urlAfterRedirects.includes('/login');
+      // 2. Logic updated to assign to the property
+      this.showSidebar = this.shouldShowHeaderAndSidebar(event.urlAfterRedirects);
     });
   }
 
   ngOnInit(): void {
     this.loadCurrentUser();
+  }
+
+  shouldShowHeaderAndSidebar(url: string): boolean {
+    return !url.includes('/login');
   }
 
   loadCurrentUser(): void {

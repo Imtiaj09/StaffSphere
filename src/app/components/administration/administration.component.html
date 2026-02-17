@@ -20,18 +20,21 @@
             <th>Name</th>
             <th>Email (Username)</th>
             <th>Role</th>
-            <th>Password</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of allUsers">
-            <td>{{ user.fullName }}</td>
+            <td>
+              <div class="user-info-cell">
+                <img [src]="user.photoUrl || 'assets/default-avatar.png'" alt="User Photo" class="user-photo">
+                <span>{{ user.fullName }}</span>
+              </div>
+            </td>
             <td>{{ user.email }}</td>
             <td>
               <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">{{ user.role }}</span>
             </td>
-            <td>******</td>
             <td class="actions-cell">
               <button class="btn-icon btn-edit" (click)="openModal(user)"><i class="fa fa-pencil"></i></button>
               <button class="btn-icon btn-delete" (click)="deleteUser(user.id)"><i class="fa fa-trash"></i></button>
@@ -69,6 +72,7 @@
         <div class="form-group">
           <label>Role</label>
           <select [(ngModel)]="userForm.role">
+            <option>Admin</option>
             <option>Sub-Admin</option>
             <option>HR</option>
             <option>Employee</option>
@@ -77,8 +81,14 @@
       </div>
       <div class="form-row">
         <div class="form-group full-width">
-          <label>Profile Image URL</label>
-          <input type="text" [(ngModel)]="userForm.photoUrl" placeholder="https://example.com/image.png">
+          <label>Photo</label>
+          <div class="custom-file-input" (click)="fileInput.click()">
+            <input type="file" #fileInput (change)="onFileSelected($event)" class="file-input-hidden" accept="image/*">
+            <span class="file-input-button">Choose file</span>
+            <span class="file-input-label">{{ selectedFile ? selectedFile.name : (userForm.photoUrl ? 'Current photo exists' : 'No file chosen') }}</span>
+          </div>
+          <!-- Only show preview for newly selected files -->
+          <img *ngIf="previewUrl" [src]="previewUrl" class="photo-preview" alt="New Photo Preview">
         </div>
       </div>
     </div>

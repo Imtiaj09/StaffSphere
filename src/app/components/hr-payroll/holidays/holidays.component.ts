@@ -44,6 +44,7 @@ export class HolidaysComponent implements OnInit {
 
   // --- Data Handling (CRUD) ---
   saveHoliday(): void {
+    // 1. Validation updated
     if (!this.holidayForm.name || !this.holidayForm.startDate) {
       alert('Holiday Name and Start Date are required.');
       return;
@@ -61,7 +62,6 @@ export class HolidaysComponent implements OnInit {
         alert('Holiday Updated Successfully!');
       }
     } else {
-      // Find the highest existing ID
       const highestId = this.allHolidays.reduce((maxId, h) => h.id > maxId ? h.id : maxId, 0);
       this.holidayForm.id = highestId + 1;
       this.allHolidays.push({ ...this.holidayForm });
@@ -84,7 +84,7 @@ export class HolidaysComponent implements OnInit {
     const storedHolidays = localStorage.getItem('holidaysData');
     if (storedHolidays) {
       this.allHolidays = JSON.parse(storedHolidays);
-      // Sort by date immediately after loading
+      // 2. Sorting on load
       this.allHolidays.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     } else {
       this.allHolidays = [];
@@ -93,7 +93,6 @@ export class HolidaysComponent implements OnInit {
 
   saveHolidaysToStorage(): void {
     localStorage.setItem('holidaysData', JSON.stringify(this.allHolidays));
-    // Sort by date after saving
     this.allHolidays.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   }
 

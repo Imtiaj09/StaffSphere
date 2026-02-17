@@ -1,17 +1,15 @@
 #wrapper {
-    display: flex;
+    display: flex; /* <--- CRITICAL FIX */
     width: 100%;
     overflow-x: hidden;
 }
-
 #sidebar-wrapper {
     min-height: 100vh;
-    width: 15rem;
+    width: 15rem; /* Explicit width */
     margin-left: -15rem;
     transition: margin 0.25s ease-out;
-    background-color: #343a40;
+    background-color: #f8f9fa;
     border-right: 1px solid #dee2e6;
-    color: #adb5bd;
 }
 
 #wrapper.toggled #sidebar-wrapper {
