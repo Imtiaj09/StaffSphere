@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { parseJson } from '../../../utils/storage.util';
 
 // The detailed model for the form and for storage
 interface EmployeeData {
@@ -118,8 +119,12 @@ export class EmployeesComponent implements OnInit {
       alert('Invalid Email Address.');
       return;
     }
-    if (this.employeeForm.country.includes('Select') || this.employeeForm.department.includes('Select') || this.employeeForm.designation.includes('Select')) {
-      alert('Please make a valid selection for Country, Department, and Designation.');
+    if (
+      this.employeeForm.country.includes('Select') ||
+      this.employeeForm.department.includes('Select') ||
+      this.employeeForm.designation.includes('Select')
+    ) {
+      alert('Please select a valid option');
       return;
     }
 
@@ -164,15 +169,12 @@ export class EmployeesComponent implements OnInit {
   loadEmployeesFromStorage(): void {
     const storedEmployees = localStorage.getItem('employeesData');
     if (storedEmployees) {
-      this.allEmployees = JSON.parse(storedEmployees);
+      this.allEmployees = parseJson<EmployeeData[]>(storedEmployees, []);
+      if (this.allEmployees.length === 0) {
+        this.setDefaultEmployee();
+      }
     } else {
-      const dummyEmployee = this.getInitialFormState();
-      dummyEmployee.employeeNo = 'Emp001';
-      dummyEmployee.firstName = 'James';
-      dummyEmployee.lastName = 'Karanja';
-      dummyEmployee.status = 'Active';
-      this.allEmployees = [dummyEmployee];
-      this.saveEmployeesToStorage();
+      this.setDefaultEmployee();
     }
   }
 
@@ -222,7 +224,9 @@ export class EmployeesComponent implements OnInit {
   }
 
   private sortData(): void {
-    if (!this.sortColumn) return;
+    if (!this.sortColumn) {
+      return;
+    }
 
     this.filteredEmployees.sort((a, b) => {
       const valA = String(a[this.sortColumn]).toLowerCase();
@@ -260,8 +264,8 @@ export class EmployeesComponent implements OnInit {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       // 3. File size check
-      if (file.size > 500000) { // 500KB limit
-        alert('File too large');
+      if (file.size > 200000) { // 200KB limit
+        alert('Image too large');
         return;
       }
       const reader = new FileReader();
@@ -277,8 +281,37 @@ export class EmployeesComponent implements OnInit {
     return employee.employeeNo;
   }
 
-  onSearch(): void { this.currentPage = 1; this.applyFiltersAndPagination(); }
-  onItemsPerPageChange(): void { this.currentPage = 1; this.applyFiltersAndPagination(); }
-  prevPage(): void { if (this.currentPage > 1) { this.currentPage--; this.applyFiltersAndPagination(); } }
-  nextPage(): void { if (this.currentPage * this.itemsPerPage < this.filteredEmployees.length) { this.currentPage++; this.applyFiltersAndPagination(); } }
+  onSearch(): void {
+    this.currentPage = 1;
+    this.applyFiltersAndPagination();
+  }
+
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
+    this.applyFiltersAndPagination();
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.applyFiltersAndPagination();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage * this.itemsPerPage < this.filteredEmployees.length) {
+      this.currentPage++;
+      this.applyFiltersAndPagination();
+    }
+  }
+
+  private setDefaultEmployee(): void {
+    const dummyEmployee = this.getInitialFormState();
+    dummyEmployee.employeeNo = 'Emp001';
+    dummyEmployee.firstName = 'James';
+    dummyEmployee.lastName = 'Karanja';
+    dummyEmployee.status = 'Active';
+    this.allEmployees = [dummyEmployee];
+    this.saveEmployeesToStorage();
+  }
 }

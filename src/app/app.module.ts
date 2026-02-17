@@ -16,6 +16,7 @@ import { SystemSettingsComponent } from './components/system-settings/system-set
 import { EmployeesComponent } from './components/hr-payroll/employees/employees.component';
 import { HolidaysComponent } from './components/hr-payroll/holidays/holidays.component';
 import { LoginComponent } from './components/login/login.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { ClickOutsideDirective } from './click-outside.directive';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ClickOutsideDirective } from './click-outside.directive';
     EmployeesComponent,
     HolidaysComponent,
     LoginComponent,
+    ProfileComponent,
     ClickOutsideDirective
   ],
   imports: [

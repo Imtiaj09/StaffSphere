@@ -1,15 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
-// 1. Define Interface
-interface SystemUser {
-  id: number;
-  fullName: string;
-  email: string;
-  password?: string;
-  role: 'Admin' | 'Sub-Admin' | 'HR' | 'Employee';
-  photoUrl?: string;
-  status: 'Active' | 'Inactive';
-}
+import { SystemUser } from '../../models/system-user.model';
+import { parseJson } from '../../utils/storage.util';
 
 @Component({
   selector: 'app-administration',
@@ -21,13 +12,16 @@ export class AdministrationComponent implements OnInit {
   allUsers: SystemUser[] = [];
   isModalVisible = false;
   isEditMode = false;
+  isPasswordVisible = false;
   userForm: SystemUser = this.getInitialFormState();
   selectedFile: File | null = null;
   previewUrl: string | ArrayBuffer | null = null;
+  selectedFileName = '';
 
   constructor() { }
 
   ngOnInit(): void {
+    this.isModalVisible = false; // Explicitly hide modal on init
     this.loadUsersFromStorage();
   }
 
@@ -43,6 +37,8 @@ export class AdministrationComponent implements OnInit {
     this.isModalVisible = true;
     this.selectedFile = null;
     this.previewUrl = null;
+    this.selectedFileName = '';
+    this.isPasswordVisible = false;
   }
 
   closeModal(): void {
@@ -92,8 +88,11 @@ export class AdministrationComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
+      this.selectedFileName = file.name;
+
       const reader = new FileReader();
       reader.onload = (e: any) => {
+        this.userForm.photoUrl = e.target.result;
         this.previewUrl = e.target.result;
       };
       reader.readAsDataURL(file);
@@ -104,20 +103,12 @@ export class AdministrationComponent implements OnInit {
   loadUsersFromStorage(): void {
     const storedUsers = localStorage.getItem('systemUsers');
     if (storedUsers) {
-      this.allUsers = JSON.parse(storedUsers);
+      this.allUsers = parseJson<SystemUser[]>(storedUsers, []);
+      if (this.allUsers.length === 0) {
+        this.initializeDefaultAdmin();
+      }
     } else {
-      // If storage is empty, create a default Super Admin
-      const defaultAdmin: SystemUser = {
-        id: 1,
-        fullName: 'Super Admin',
-        email: 'admin@company.com',
-        password: '12345',
-        role: 'Admin',
-        status: 'Active',
-        photoUrl: 'https://i.pravatar.cc/40' // Default placeholder
-      };
-      this.allUsers = [defaultAdmin];
-      this.saveUsersToStorage();
+      this.initializeDefaultAdmin();
     }
   }
 
@@ -126,6 +117,24 @@ export class AdministrationComponent implements OnInit {
   }
 
   getInitialFormState(): SystemUser {
-    return { id: 0, fullName: '', email: '', password: '', role: 'Employee', status: 'Active', photoUrl: '' };
+    return { id: 0, fullName: '', email: '', password: '', role: 'User', photoUrl: '' };
+  }
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  private initializeDefaultAdmin(): void {
+    const defaultAdmin: SystemUser = {
+      id: 1,
+      fullName: 'Super Admin',
+      email: 'admin@company.com',
+      password: 'admin123',
+      role: 'Admin',
+      status: 'Active',
+      photoUrl: 'https://i.pravatar.cc/40'
+    };
+    this.allUsers = [defaultAdmin];
+    this.saveUsersToStorage();
   }
 }

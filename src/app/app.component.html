@@ -1,90 +1,83 @@
-<div *ngIf="showSidebar">
-  <div class="d-flex" id="wrapper" [class.toggled]="isToggled">
+<div class="d-flex" id="wrapper" [class.toggled]="isToggled">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper" *ngIf="showSidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-heading">
+        <i class="fa fa-globe"></i> StaffSphere
+      </div>
+      <div class="list-group list-group-flush">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="list-group-item list-group-item-action">
+          <i class="fa fa-home mr-3"></i> Dashboard
+        </a>
+        <a routerLink="/clients" routerLinkActive="active" class="list-group-item list-group-item-action">
+          <i class="fa fa-users mr-3"></i> Clients
+        </a>
+        <a routerLink="/fixed-assets" routerLinkActive="active" class="list-group-item list-group-item-action">
+          <i class="fa fa-shopping-cart mr-3"></i> Fixed Assets
+        </a>
 
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-      <div class="sidebar-inner">
-        <div class="sidebar-heading">
-          <i class="fa fa-globe"></i> StaffSphere
-        </div>
-        <div class="list-group list-group-flush">
-          <a routerLink="/dashboard" routerLinkActive="active" class="list-group-item list-group-item-action">
-            <i class="fa fa-home mr-3"></i> Dashboard
+        <!-- HR & Payroll Collapsible Menu -->
+        <div class="list-group-item-container">
+          <a (click)="toggleHrPayroll()" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <span><i class="fa fa-th-large mr-3"></i> HR & Payroll</span>
+            <i class="fa fa-angle-left" [class.rotated]="isHrPayrollOpen"></i>
           </a>
-          <a routerLink="/clients" routerLinkActive="active" class="list-group-item list-group-item-action">
-            <i class="fa fa-users mr-3"></i> Clients
-          </a>
-          <a routerLink="/fixed-assets" routerLinkActive="active" class="list-group-item list-group-item-action">
-            <i class="fa fa-shopping-cart mr-3"></i> Fixed Assets
-          </a>
-
-          <!-- HR & Payroll Collapsible Menu -->
-          <div class="list-group-item-container">
-            <a (click)="toggleHrPayroll()" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-              <span><i class="fa fa-th-large mr-3"></i> HR & Payroll</span>
-              <i class="fa fa-angle-left" [class.rotated]="isHrPayrollOpen"></i>
-            </a>
-            <div class="submenu" [class.open]="isHrPayrollOpen">
-              <a routerLink="/hr-payroll/employees" routerLinkActive="active" class="list-group-item list-group-item-action submenu-item">Employees</a>
-              <a routerLink="/hr-payroll/holidays" routerLinkActive="active" class="list-group-item list-group-item-action submenu-item">Holidays</a>
-              <a href="#" class="list-group-item list-group-item-action submenu-item">Salaries</a>
-              <a href="#" class="list-group-item list-group-item-action submenu-item">Attendance</a>
-            </div>
+          <div class="submenu" [class.open]="isHrPayrollOpen">
+            <a routerLink="/hr-payroll/employees" routerLinkActive="active" class="list-group-item list-group-item-action submenu-item">Employees</a>
+            <a routerLink="/hr-payroll/holidays" routerLinkActive="active" class="list-group-item list-group-item-action submenu-item">Holidays</a>
+            <a href="#" class="list-group-item list-group-item-action submenu-item">Salaries</a>
+            <a href="#" class="list-group-item list-group-item-action submenu-item">Attendance</a>
           </div>
-
-          <a routerLink="/leave-applications" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            <span><i class="fa fa-tachometer mr-3"></i> Leave Applications</span>
-            <i class="fa fa-angle-left"></i>
-          </a>
-          <a routerLink="/security" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            <span><i class="fa fa-shopping-cart mr-3"></i> Security</span>
-            <i class="fa fa-angle-left"></i>
-          </a>
-          <a routerLink="/administration" routerLinkActive="active" class="list-group-item list-group-item-action">
-            <i class="fa fa-bookmark mr-3"></i> Administration
-          </a>
-          <a routerLink="/system-settings" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            <span><i class="fa fa-folder mr-3"></i> System Settings</span>
-            <i class="fa fa-angle-left"></i>
-          </a>
         </div>
+
+        <a routerLink="/leave-applications" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <span><i class="fa fa-tachometer mr-3"></i> Leave Applications</span>
+          <i class="fa fa-angle-left"></i>
+        </a>
+        <a routerLink="/security" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <span><i class="fa fa-shopping-cart mr-3"></i> Security</span>
+          <i class="fa fa-angle-left"></i>
+        </a>
+        <a routerLink="/administration" routerLinkActive="active" class="list-group-item list-group-item-action">
+          <i class="fa fa-bookmark mr-3"></i> Administration
+        </a>
+        <a routerLink="/system-settings" routerLinkActive="active" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <span><i class="fa fa-folder mr-3"></i> System Settings</span>
+          <i class="fa fa-angle-left"></i>
+        </a>
       </div>
     </div>
-
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-      <!-- Global Top Navigation Bar -->
-      <header class="app-header" *ngIf="currentUser">
-        <div class="header-left">
-          <button class="btn btn-primary" id="menu-toggle" (click)="toggleSidebar()">
-            <i class="fa fa-bars"></i>
-          </button>
-          <h1 class="header-title">Staff & Operations Hub</h1>
-        </div>
-        <div class="profile-section" (clickOutside)="isUserMenuOpen = false">
-          <div class="user-profile-header" (click)="toggleUserMenu()">
-            <img [src]="currentUser?.photoUrl || 'assets/default-avatar.png'" alt="User Avatar" class="avatar">
-            <div class="user-details">
-              <span class="user-name">{{ currentUser?.fullName }}</span>
-              <span class="user-role">{{ currentUser?.role }}</span>
-            </div>
-          </div>
-          <div class="user-dropdown-menu" *ngIf="isUserMenuOpen">
-            <a routerLink="/profile"><i class="fa fa-user"></i> Profile</a>
-            <hr>
-            <a (click)="logout()"><i class="fa fa-sign-out"></i> Logout</a>
-          </div>
-        </div>
-      </header>
-
-      <!-- Main Content Area -->
-      <main class="container-fluid">
-        <router-outlet></router-outlet>
-      </main>
-    </div>
   </div>
-</div>
 
-<div *ngIf="!showSidebar">
-  <router-outlet></router-outlet>
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <!-- Global Top Navigation Bar -->
+    <header class="app-header" *ngIf="showSidebar && currentUser">
+      <div class="header-left">
+        <button class="btn btn-primary" id="menu-toggle" (click)="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h1 class="header-title">Staff & Operations Hub</h1>
+      </div>
+      <div class="profile-section" appClickOutside (appClickOutside)="isUserMenuOpen = false">
+        <div class="user-profile-header" (click)="toggleUserMenu()">
+          <img [src]="currentUser?.photoUrl || 'assets/default-avatar.png'" alt="User Avatar" class="avatar">
+          <div class="user-details">
+            <span class="user-name">{{ currentUser?.fullName }}</span>
+            <span class="user-role">{{ currentUser?.role }}</span>
+          </div>
+        </div>
+        <div class="user-dropdown-menu" *ngIf="isUserMenuOpen">
+          <a routerLink="/profile"><i class="fa fa-user"></i> Profile</a>
+          <hr>
+          <a (click)="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container-fluid">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

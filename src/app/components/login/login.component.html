@@ -10,7 +10,12 @@
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" [(ngModel)]="loginData.password" placeholder="Enter your password">
+        <div class="password-field">
+          <input [type]="isPasswordVisible ? 'text' : 'password'" id="password" [(ngModel)]="loginData.password" placeholder="Enter your password">
+          <button type="button" class="password-toggle-btn" (click)="togglePasswordVisibility()" [attr.aria-label]="isPasswordVisible ? 'Hide password' : 'Show password'">
+            <i class="fa" [ngClass]="isPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
       </div>
       <button class="btn-sign-in" (click)="onLogin()">Sign In</button>
     </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { parseJson } from '../../../utils/storage.util';
 
 interface Holiday {
   id: number;
@@ -83,9 +84,11 @@ export class HolidaysComponent implements OnInit {
   loadHolidaysFromStorage(): void {
     const storedHolidays = localStorage.getItem('holidaysData');
     if (storedHolidays) {
-      this.allHolidays = JSON.parse(storedHolidays);
+      this.allHolidays = parseJson<Holiday[]>(storedHolidays, []);
       // 2. Sorting on load
-      this.allHolidays.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+      this.allHolidays.sort((a, b) =>
+        this.toLocalDate(a.startDate).getTime() - this.toLocalDate(b.startDate).getTime()
+      );
     } else {
       this.allHolidays = [];
     }
@@ -93,7 +96,9 @@ export class HolidaysComponent implements OnInit {
 
   saveHolidaysToStorage(): void {
     localStorage.setItem('holidaysData', JSON.stringify(this.allHolidays));
-    this.allHolidays.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+    this.allHolidays.sort((a, b) =>
+      this.toLocalDate(a.startDate).getTime() - this.toLocalDate(b.startDate).getTime()
+    );
   }
 
   getInitialFormState(): Holiday {
@@ -101,8 +106,15 @@ export class HolidaysComponent implements OnInit {
   }
 
   getDayOfWeek(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
+    if (!dateString) {
+      return '';
+    }
+    const date = this.toLocalDate(dateString);
     return date.toLocaleDateString('en-US', { weekday: 'long' });
+  }
+
+  private toLocalDate(dateString: string): Date {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
   }
 }

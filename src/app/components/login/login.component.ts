@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-// Re-using the SystemUser interface definition for clarity
-interface SystemUser {
-  id: number;
-  fullName: string;
-  email: string;
-  password?: string;
-  role: 'Admin' | 'Sub-Admin' | 'HR' | 'Employee';
-  status: 'Active' | 'Inactive';
-}
+import { SystemUser } from '../../models/system-user.model';
+import { parseJson } from '../../utils/storage.util';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +14,7 @@ export class LoginComponent implements OnInit {
     email: '',
     password: ''
   };
+  isPasswordVisible = false;
 
   constructor(private router: Router) { }
 
@@ -46,7 +39,11 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const allUsers: SystemUser[] = JSON.parse(storedUsers);
+    const allUsers = parseJson<SystemUser[]>(storedUsers, []);
+    if (allUsers.length === 0) {
+      alert('Unable to read system users. Please contact the administrator.');
+      return;
+    }
 
     const foundUser = allUsers.find(user => user.email === this.loginData.email && user.password === this.loginData.password);
 
@@ -59,5 +56,9 @@ export class LoginComponent implements OnInit {
       // 4. Failure
       alert('Invalid Email or Password');
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }

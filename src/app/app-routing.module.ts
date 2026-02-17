@@ -10,6 +10,7 @@ import { SystemSettingsComponent } from './components/system-settings/system-set
 import { EmployeesComponent } from './components/hr-payroll/employees/employees.component';
 import { HolidaysComponent } from './components/hr-payroll/holidays/holidays.component';
 import { LoginComponent } from './components/login/login.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './guards/auth.guard'; // Import the guard
 
 const routes: Routes = [
@@ -26,6 +27,8 @@ const routes: Routes = [
   { path: 'security', component: SecurityComponent, canActivate: [AuthGuard] },
   { path: 'administration', component: AdministrationComponent, canActivate: [AuthGuard] },
   { path: 'system-settings', component: SystemSettingsComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

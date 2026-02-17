@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { parseJson } from '../../utils/storage.util';
 
 interface Client {
   code: string;
@@ -85,7 +86,7 @@ export class ClientsComponent implements OnInit {
   private loadClientsFromStorage(): void {
     const storedClients = localStorage.getItem('clientsData');
     if (storedClients) {
-      this.clients = JSON.parse(storedClients);
+      this.clients = parseJson<Client[]>(storedClients, []);
     } else {
       this.clients = [
         { code: 'CL23523', name: 'Macro COde', address: 'WERWRWE', phone: '0711111111', email: 'macrocode@gmail.com', status: 'Active' }

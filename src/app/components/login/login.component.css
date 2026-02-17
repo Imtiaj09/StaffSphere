@@ -55,6 +55,26 @@
     font-size: 1rem;
 }
 
+.password-field {
+    position: relative;
+}
+
+.password-field input {
+    padding-right: 42px;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0;
+}
+
 .btn-sign-in {
     width: 100%;
     background-color: #007bff;

@@ -48,7 +48,7 @@
               <td>{{ employee.leaveBalance > 0 ? employee.leaveBalance + ' Days' : '' }}</td>
               <td><span class="status-indicator" [ngClass]="{'active': employee.status === 'Active', 'inactive': employee.status === 'Inactive'}"></span></td>
               <td class="actions-cell">
-                <div class="actions-dropdown-container" (clickOutside)="activeDropdownId = null">
+                <div class="actions-dropdown-container" appClickOutside (appClickOutside)="activeDropdownId = null">
                   <button class="actions-btn" (click)="toggleActionsDropdown(i, $event)">
                     Actions <i class="fa fa-caret-down"></i>
                   </button>

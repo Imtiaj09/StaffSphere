@@ -1,16 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
-interface SystemUser {
-  id: number;
-  fullName: string;
-  email: string;
-  password?: string;
-  role: 'Admin' | 'Sub-Admin' | 'HR' | 'Employee';
-  status: 'Active' | 'Inactive';
-  photoUrl?: string;
-}
+import { SystemUser } from './models/system-user.model';
+import { parseJson } from './utils/storage.util';
 
 @Component({
   selector: 'app-root',
@@ -23,16 +15,20 @@ export class AppComponent implements OnInit {
   isHrPayrollOpen = false;
   isUserMenuOpen = false;
   currentUser: SystemUser | null = null;
-  showSidebar: boolean = true; // 1. Property added
+  showSidebar = true;
 
   constructor(public router: Router) {
+    this.showSidebar = this.shouldShowHeaderAndSidebar(this.router.url);
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
+      this.loadCurrentUser();
+      this.isUserMenuOpen = false;
       if (event.urlAfterRedirects.includes('/hr-payroll')) {
         this.isHrPayrollOpen = true;
+      } else {
+        this.isHrPayrollOpen = false;
       }
-      // 2. Logic updated to assign to the property
       this.showSidebar = this.shouldShowHeaderAndSidebar(event.urlAfterRedirects);
     });
   }
@@ -47,20 +43,18 @@ export class AppComponent implements OnInit {
 
   loadCurrentUser(): void {
     const user = localStorage.getItem('currentUser');
-    if (user) {
-      this.currentUser = JSON.parse(user);
-    }
+    this.currentUser = parseJson<SystemUser | null>(user, null);
   }
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     this.isToggled = !this.isToggled;
   }
 
-  toggleHrPayroll() {
+  toggleHrPayroll(): void {
     this.isHrPayrollOpen = !this.isHrPayrollOpen;
   }
 
-  toggleUserMenu() {
+  toggleUserMenu(): void {
     this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 
