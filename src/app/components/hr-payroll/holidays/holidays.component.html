@@ -1,0 +1,89 @@
+<div class="holidays-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="title">Holidays</h1>
+  </div>
+
+  <!-- Top Controls -->
+  <div class="top-controls">
+    <button class="add-holiday-btn" (click)="openModal()">
+      <i class="fa fa-plus"></i> Add New Holiday
+    </button>
+  </div>
+
+  <!-- Holidays Table Card -->
+  <div class="holidays-table-card">
+    <div class="table-responsive">
+      <table class="holidays-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Holiday Name</th>
+            <th>Start Date</th>
+            <th>End Day</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let holiday of allHolidays; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ holiday.name }}</td>
+            <td>{{ holiday.startDate | date: 'dd-MM-yyyy' }}</td>
+            <td>{{ getDayOfWeek(holiday.endDate) }}</td>
+            <td>{{ holiday.description }}</td>
+            <td class="actions-cell">
+              <button class="btn-icon btn-edit" (click)="openModal(holiday)"><i class="fa fa-pencil"></i></button>
+              <button class="btn-icon btn-delete" (click)="deleteHoliday(holiday.id)"><i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr *ngIf="allHolidays.length === 0">
+            <td colspan="6" class="text-center">No holidays found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Holiday Modal -->
+<div class="modal-overlay" *ngIf="isModalVisible">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 *ngIf="!isEditMode"><i class="fa fa-plus-circle"></i> Add New Holiday</h3>
+      <h3 *ngIf="isEditMode"><i class="fa fa-pencil"></i> Edit Holiday</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Holiday Name</label>
+          <input type="text" [(ngModel)]="holidayForm.name" placeholder="e.g., Labour Day">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" [(ngModel)]="holidayForm.startDate">
+        </div>
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" [(ngModel)]="holidayForm.endDate">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Description</label>
+          <textarea [(ngModel)]="holidayForm.description" rows="3" placeholder="Optional description..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-back" (click)="closeModal()">
+        <i class="fa fa-undo"></i> Back to List
+      </button>
+      <button class="btn-register" (click)="saveHoliday()">
+        <i class="fa fa-save"></i> {{ isEditMode ? 'Update Holiday' : 'Register Holiday' }}
+      </button>
+    </div>
+  </div>
+</div>

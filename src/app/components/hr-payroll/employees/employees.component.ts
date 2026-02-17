@@ -118,6 +118,10 @@ export class EmployeesComponent implements OnInit {
       alert('Invalid Email Address.');
       return;
     }
+    if (this.employeeForm.country.includes('Select') || this.employeeForm.department.includes('Select') || this.employeeForm.designation.includes('Select')) {
+      alert('Please make a valid selection for Country, Department, and Designation.');
+      return;
+    }
 
     if (this.isEditMode) {
       const index = this.allEmployees.findIndex(e => e.employeeNo === this.employeeForm.employeeNo);
@@ -187,10 +191,13 @@ export class EmployeesComponent implements OnInit {
   }
 
   applyFiltersAndPagination(): void {
+    const searchTermLower = this.searchTerm.toLowerCase();
     // Filter first
     this.filteredEmployees = this.allEmployees.filter(e =>
-      (e.firstName + ' ' + e.lastName).toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      e.employeeNo.toLowerCase().includes(this.searchTerm.toLowerCase())
+      (e.firstName + ' ' + e.middleName + ' ' + e.lastName).toLowerCase().includes(searchTermLower) ||
+      e.employeeNo.toLowerCase().includes(searchTermLower) ||
+      e.email.toLowerCase().includes(searchTermLower) ||
+      e.phone.toLowerCase().includes(searchTermLower)
     );
 
     // Then sort
@@ -218,8 +225,8 @@ export class EmployeesComponent implements OnInit {
     if (!this.sortColumn) return;
 
     this.filteredEmployees.sort((a, b) => {
-      const valA = a[this.sortColumn];
-      const valB = b[this.sortColumn];
+      const valA = String(a[this.sortColumn]).toLowerCase();
+      const valB = String(b[this.sortColumn]).toLowerCase();
 
       if (valA < valB) {
         return this.sortDirection === 'asc' ? -1 : 1;
@@ -245,6 +252,18 @@ export class EmployeesComponent implements OnInit {
         this.dropdownStyle = { top: '100%', bottom: 'auto' };
       }
       this.activeDropdownId = index; // Open for the clicked row index
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.employeeForm.photoUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 

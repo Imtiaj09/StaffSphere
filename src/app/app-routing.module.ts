@@ -10,6 +10,7 @@ import { SecurityComponent } from './components/security/security.component';
 import { AdministrationComponent } from './components/administration/administration.component';
 import { SystemSettingsComponent } from './components/system-settings/system-settings.component';
 import { EmployeesComponent } from './components/hr-payroll/employees/employees.component';
+import { HolidaysComponent } from './components/hr-payroll/holidays/holidays.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'fixed-assets', component: FixedAssetsComponent },
   // New top-level route for employees to ensure it uses the main layout
   { path: 'hr-payroll/employees', component: EmployeesComponent },
+  { path: 'hr-payroll/holidays', component: HolidaysComponent },
   { path: 'leave-applications', component: LeaveApplicationsComponent },
   { path: 'security', component: SecurityComponent },
   { path: 'administration', component: AdministrationComponent },

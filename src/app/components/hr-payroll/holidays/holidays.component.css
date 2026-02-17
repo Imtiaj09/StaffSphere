@@ -1,0 +1,108 @@
+/* General Container */
+.holidays-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Top Controls */
+.top-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.add-holiday-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Table Card */
+.holidays-table-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.holidays-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.holidays-table th, .holidays-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.holidays-table thead th {
+    font-weight: 600;
+    color: #333;
+    background-color: #f9fafb;
+}
+
+.holidays-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Zebra striping */
+}
+
+.actions-cell {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.btn-edit { color: #007bff; }
+.btn-delete { color: #dc3545; }
+
+/* --- Modal Styles --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: grid; place-items: center; z-index: 1010; }
+.modal-content { background-color: white; border-radius: 15px; width: 90%; max-width: 700px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+.modal-header { padding: 20px 25px; border-bottom: 1px solid #f0f0f0; }
+.modal-header h3 { margin: 0; font-size: 1.5rem; color: #333; display: flex; align-items: center; gap: 12px; }
+.modal-body { padding: 25px; }
+.form-row { display: flex; gap: 20px; margin-bottom: 20px; }
+.form-group { flex: 1; display: flex; flex-direction: column; }
+.form-group.full-width { flex-basis: 100%; }
+.form-group label { font-weight: 600; color: #555; margin-bottom: 8px; }
+.form-group input, .form-group textarea { border: 1px solid #ddd; border-radius: 6px; padding: 12px; font-size: 1rem; font-family: inherit; }
+.modal-footer { display: flex; justify-content: space-between; padding: 20px 25px; background-color: #f9fafb; border-top: 1px solid #f0f0f0; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; }
+.btn-back, .btn-register { border: none; border-radius: 8px; padding: 12px 20px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.btn-back { background-color: #ffc107; color: #333; }
+.btn-register { background-color: #007bff; color: white; }
+
+.text-center {
+    text-align: center;
+}

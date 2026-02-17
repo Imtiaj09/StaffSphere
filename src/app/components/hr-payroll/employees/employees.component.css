@@ -193,43 +193,67 @@
     border-color: #007bff;
 }
 
-/* Detail View and Modal styles remain as they are */
+/* Detail View */
 .detail-view-card {
     background-color: white;
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #f0f0f0;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 .detail-view-header {
     font-size: 1.8rem;
     font-weight: 600;
     color: #333;
-    margin-bottom: 25px;
+    margin: 0;
 }
+
 .detail-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0; /* No gap for seamless rows */
 }
+
 .detail-item {
     display: grid;
     grid-template-columns: 150px 1fr; /* Label and Value columns */
     padding: 15px;
     align-items: center;
 }
+
 .detail-item:nth-child(odd) {
     background-color: #f8f9fa; /* Zebra striping */
 }
+
 .detail-label {
     font-weight: 700;
     color: #555;
 }
+
 .detail-value {
     color: #333;
 }
+
 .detail-footer {
     margin-top: 25px;
 }
+
 .btn-back {
     background-color: #ffc107;
     color: #212529;

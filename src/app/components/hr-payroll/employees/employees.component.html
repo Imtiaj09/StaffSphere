@@ -66,7 +66,7 @@
       <!-- Table Footer -->
       <div class="table-footer">
         <div class="showing-entries">
-          Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ currentPage * itemsPerPage > filteredEmployees.length ? filteredEmployees.length : currentPage * itemsPerPage }} of {{ filteredEmployees.length }} entries
+          Showing {{ filteredEmployees.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1 }} to {{ currentPage * itemsPerPage > filteredEmployees.length ? filteredEmployees.length : currentPage * itemsPerPage }} of {{ filteredEmployees.length }} entries
         </div>
         <div class="pagination">
           <button class="pagination-btn" (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
@@ -80,7 +80,10 @@
   <!-- Employee Detail View -->
   <div *ngIf="isDetailViewVisible && selectedEmployee">
     <div class="detail-view-card">
-      <h2 class="detail-view-header">Employee Details</h2>
+      <div class="profile-header">
+        <h2 class="detail-view-header">{{ selectedEmployee.firstName }} {{ selectedEmployee.lastName }}</h2>
+        <img [src]="selectedEmployee.photoUrl || 'assets/default-user.png'" alt="Profile Photo" class="profile-img">
+      </div>
       <div class="detail-grid">
         <!-- Row 1 -->
         <div class="detail-item"><span class="detail-label">EmpNo</span><span class="detail-value">{{ selectedEmployee.employeeNo }}</span></div>
@@ -158,7 +161,9 @@
         <div class="form-group"><label>Employment Terms</label><select [(ngModel)]="employeeForm.employmentTerms"><option>Select Employment Terms</option><option>Permanent</option><option>Contractual</option><option>Probation</option><option>Internship</option><option>Part-Time</option></select></div>
         <div class="form-group"><label>Disability Type</label><select [(ngModel)]="employeeForm.disabilityType"><option>Select Disability Type</option><option>None</option><option>Physical Impairment</option><option>Visual Impairment</option><option>Hearing Impairment</option><option>Cognitive/Learning Disability</option></select></div>
         <div class="form-group"><label>Disability Certificate</label><input type="text" [(ngModel)]="employeeForm.disabilityCert"></div>
-        <div class="form-group"><label>Employee Photo</label><input type="file"></div>
+        <div class="form-group"><label>Status</label><select [(ngModel)]="employeeForm.status"><option>Active</option><option>Inactive</option></select></div>
+        <div class="form-group"><label>Leave Balance</label><input type="number" [(ngModel)]="employeeForm.leaveBalance"></div>
+        <div class="form-group"><label>Employee Photo</label><input type="file" (change)="onFileSelected($event)"></div>
       </div>
     </div>
     <div class="modal-footer">
