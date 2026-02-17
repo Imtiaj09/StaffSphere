@@ -1,15 +1,17 @@
 #wrapper {
     display: flex;
-    transition: all 0.3s;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 #sidebar-wrapper {
     min-height: 100vh;
-    width: 250px;
+    width: 15rem;
+    margin-left: -15rem;
+    transition: margin 0.25s ease-out;
     background-color: #343a40;
+    border-right: 1px solid #dee2e6;
     color: #adb5bd;
-    transition: all 0.3s;
-    margin-left: -250px;
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -154,4 +156,13 @@
 
 .logout-btn {
     cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
 }

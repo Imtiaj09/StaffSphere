@@ -23,25 +23,21 @@ export class AppComponent implements OnInit {
   isHrPayrollOpen = false;
   isUserMenuOpen = false;
   currentUser: SystemUser | null = null;
+  showSidebar: boolean = true;
 
-  constructor(public router: Router) { // Changed to public
+  constructor(public router: Router) {
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       if (event.urlAfterRedirects.includes('/hr-payroll')) {
         this.isHrPayrollOpen = true;
       }
-      // Hide sidebar and header on login page
-      this.shouldShowHeaderAndSidebar(event.urlAfterRedirects);
+      this.showSidebar = !event.urlAfterRedirects.includes('/login');
     });
   }
 
   ngOnInit(): void {
     this.loadCurrentUser();
-  }
-
-  shouldShowHeaderAndSidebar(url: string): boolean {
-    return url !== '/login';
   }
 
   loadCurrentUser(): void {
